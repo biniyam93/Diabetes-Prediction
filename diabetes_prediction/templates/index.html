@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-6 text-center">Diabetes Prediction</h2>
+            <form id="prediction-form" class="space-y-4">
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                    <input type="text" name="gender" id="gender" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                    <input type="number" name="age" id="age" step="0.1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="hypertension" class="block text-sm font-medium text-gray-700">Hypertension</label>
+                    <input type="number" name="hypertension" id="hypertension" step="0.1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="heart_disease" class="block text-sm font-medium text-gray-700">Heart Disease</label>
+                    <input type="number" name="heart_disease" id="heart_disease" step="0.1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="smoking_history" class="block text-sm font-medium text-gray-700">Smoking History</label>
+                    <input type="text" name="smoking_history" id="smoking_history" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="bmi" class="block text-sm font-medium text-gray-700">BMI</label>
+                    <input type="number" name="bmi" id="bmi" step="0.1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="HbA1c_level" class="block text-sm font-medium text-gray-700">HbA1c Level</label>
+                    <input type="number" name="HbA1c_level" id="HbA1c_level" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="blood_glucose_level" class="block text-sm font-medium text-gray-700">Blood Glucose Level</label>
+                    <input type="number" name="blood_glucose_level" id="blood_glucose_level" step="1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Predict</button>
+                </div>
+            </form>
+            <div id="result" class="mt-6 text-center text-lg font-semibold"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Clear previous result
+            document.getElementById('result').innerText = '';
+
+            const formData = new FormData(this);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.prediction ? `Prediction: ${result.prediction}` : `Error: ${result.error}`;
+
+            // Reset the form after submission
+            this.reset();
+        });
+    </script>
+</body>
+
+</html>
